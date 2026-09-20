@@ -200,7 +200,8 @@ function App() {
 
             <div className="hero-visual">
               <div className="portrait-card">
-                <div
+                <img
+                  src={portrait}
                   alt="Pratish Kumar Agarwal"
                 />
 
@@ -263,7 +264,7 @@ function App() {
                 applications, backend architecture,
                 intelligent systems and connected
                 hardware. I’m currently developing
-                <strong> EduSphere × StudyFlow</strong>,
+                <strong> EduSphere </strong>,
                 a student-focused platform combining
                 a marketplace with an AI study
                 assistant.
@@ -317,8 +318,6 @@ function App() {
 
               <h2>
                 EduSphere
-                <br />
-                <span>× StudyFlow</span>
               </h2>
 
               <p>
