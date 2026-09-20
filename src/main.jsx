@@ -13,6 +13,8 @@ import {
   Globe2,
   Bot,
   Mail,
+  Menu,
+  X,
   Play,
   Radio,
   Server,
@@ -37,6 +39,7 @@ function ParticleField() {
   const points = useRef();
   const group = useRef();
   const mouse = useRef(new THREE.Vector2(0, 0));
+  const touchActive = useRef(false);
   const { viewport } = useThree();
 
   const data = useMemo(() => {
@@ -60,12 +63,59 @@ function ParticleField() {
   }, []);
 
   useEffect(() => {
-    const onMove = (e) => {
-      mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    const setPointer = (clientX, clientY) => {
+      mouse.current.x = (clientX / window.innerWidth) * 2 - 1;
+      mouse.current.y = -(clientY / window.innerHeight) * 2 + 1;
     };
-    window.addEventListener("pointermove", onMove, { passive: true });
-    return () => window.removeEventListener("pointermove", onMove);
+
+    const onPointerMove = (e) => {
+      if (e.pointerType === "touch") touchActive.current = true;
+      setPointer(e.clientX, e.clientY);
+    };
+
+    const onPointerDown = (e) => {
+      if (e.pointerType === "touch") touchActive.current = true;
+      setPointer(e.clientX, e.clientY);
+    };
+
+    const onPointerUp = (e) => {
+      if (e.pointerType === "touch") touchActive.current = false;
+    };
+
+    const onTouchStart = (e) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      touchActive.current = true;
+      setPointer(touch.clientX, touch.clientY);
+    };
+
+    const onTouchMove = (e) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      touchActive.current = true;
+      setPointer(touch.clientX, touch.clientY);
+    };
+
+    const onTouchEnd = () => {
+      touchActive.current = false;
+      mouse.current.multiplyScalar(0.82);
+    };
+
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("pointerdown", onPointerDown, { passive: true });
+    window.addEventListener("pointerup", onPointerUp, { passive: true });
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+
+    return () => {
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
   }, []);
 
   useFrame((state, delta) => {
@@ -89,13 +139,15 @@ function ParticleField() {
       const dx = x - targetX;
       const dy = y - targetY;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      const influence = Math.max(0, 1 - dist / 1.15);
+      const interactionRadius = touchActive.current ? 1.45 : 1.15;
+      const influence = Math.max(0, 1 - dist / interactionRadius);
 
       if (influence > 0) {
-        const force = influence * influence * 0.8;
+        const sensitivity = touchActive.current ? 1.45 : 0.8;
+        const force = influence * influence * sensitivity;
         x += (dx / Math.max(dist, 0.05)) * force * delta * 12;
         y += (dy / Math.max(dist, 0.05)) * force * delta * 12;
-        z += influence * 0.22 * Math.sin(i * 0.07 + t * 4);
+        z += influence * (touchActive.current ? 0.32 : 0.22) * Math.sin(i * 0.07 + t * 4);
       }
 
       const noise = Math.sin(t * 0.55 + i * 0.017) * 0.018;
@@ -292,10 +344,12 @@ function SocialLinks() {
 
 function App() {
   const [autoScroll, setAutoScroll] = useState(true);
+  const [mobileMenu, setMobileMenu] = useState(false);
   const heroTimer = useRef(null);
   const lenisRef = useRef(null);
 
   const scrollTo = useCallback((id) => {
+    setMobileMenu(false);
     document.getElementById(id)?.scrollIntoView({
       behavior: "smooth",
       block: "start",
@@ -382,20 +436,41 @@ function App() {
           <small>AI / SOFTWARE / CREATIVE TECHNOLOGY</small>
         </button>
 
-        <nav>
+        <nav className="desktop-nav">
           <button onClick={() => scrollTo("intro")}>ABOUT</button>
           <button onClick={() => scrollTo("work")}>WORK</button>
           <button onClick={() => scrollTo("tech")}>TECH</button>
           <button onClick={() => scrollTo("contact")}>CONTACT</button>
         </nav>
 
-        <a
-          className="nav-cta"
-          href={LINKS.edusphere}
-          {...external}
-        >
-          EXPLORE EDUSPHERE <ArrowUpRight size={14} />
-        </a>
+        <div className="nav-actions">
+          <a
+            className="nav-cta"
+            href={LINKS.edusphere}
+            {...external}
+          >
+            EXPLORE EDUSPHERE <ArrowUpRight size={14} />
+          </a>
+          <button
+            className="menu-toggle"
+            type="button"
+            aria-label={mobileMenu ? "Close navigation" : "Open navigation"}
+            aria-expanded={mobileMenu}
+            onClick={() => setMobileMenu((value) => !value)}
+          >
+            {mobileMenu ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+
+        <div className={`mobile-menu ${mobileMenu ? "open" : ""}`}>
+          <button onClick={() => scrollTo("intro")}>ABOUT</button>
+          <button onClick={() => scrollTo("work")}>WORK</button>
+          <button onClick={() => scrollTo("tech")}>TECH</button>
+          <button onClick={() => scrollTo("contact")}>CONTACT</button>
+          <a href={LINKS.edusphere} {...external} onClick={() => setMobileMenu(false)}>
+            EXPLORE EDUSPHERE <ArrowUpRight size={14} />
+          </a>
+        </div>
       </header>
 
       <main>
@@ -445,9 +520,7 @@ function App() {
 
             <div className="portrait-wrap">
               <div className="portrait-aura" />
-              <div
-                alt="Pratish Kumar Agarwal"
-              />
+              <img src={portrait} alt="Pratish Kumar Agarwal" />
             </div>
 
             <div className="orbit-copy orbit-copy-a">
@@ -554,7 +627,7 @@ function App() {
               [
                 Radio,
                 "IoT / EMBEDDED",
-                "Connected systems combining sensors, automation, Raspberry Pi and intelligent control.",
+                "Connected systems combining sensors, automation, and intelligent control.",
               ],
             ].map(([Icon, title, body]) => (
               <article className="service reveal" key={title}>
@@ -691,7 +764,6 @@ function App() {
               "Gemini",
               "Three.js",
               "Arduino",
-              "Raspberry Pi",
               "GSAP",
               "Lenis",
             ].map((item, index) => (
