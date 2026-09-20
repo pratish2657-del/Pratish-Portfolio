@@ -520,7 +520,7 @@ function App() {
 
             <div className="portrait-wrap">
               <div className="portrait-aura" />
-              <img src={portrait} alt="Pratish Kumar Agarwal" />
+              <div alt="Pratish Kumar Agarwal" />
             </div>
 
             <div className="orbit-copy orbit-copy-a">
