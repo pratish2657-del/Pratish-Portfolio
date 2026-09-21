@@ -2414,3 +2414,59 @@ footer {
     white-space: nowrap;
   }
 }
+
+/* =========================================================
+   EDUCATION MESSAGE — FINAL POSITION
+   ========================================================= */
+
+/* TABLET
+   Smaller + right side
+*/
+@media (min-width: 601px) and (max-width: 900px) {
+  .hero-visual .orbit-copy-b {
+    top: 42%;
+    left: auto;
+    right: 4%;
+    width: 220px;
+    transform: none;
+    text-align: left;
+    z-index: 50;
+  }
+
+  .hero-visual .orbit-copy-b span {
+    font-size: 9px;
+    line-height: 1.15;
+  }
+
+  .hero-visual .orbit-copy-b strong {
+    display: block;
+    font-size: 14px;
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .hero-visual .orbit-copy-b {
+    top: 62%;
+    left: 8%;
+    right: auto;
+    width: 84%;
+    transform: none;
+    text-align: left;
+    z-index: 40;
+  }
+
+  .hero-visual .orbit-copy-b span {
+    font-size: 9px;
+    line-height: 1.15;
+  }
+
+  .hero-visual .orbit-copy-b strong {
+    display: block;
+    font-size: 13px;
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+}
