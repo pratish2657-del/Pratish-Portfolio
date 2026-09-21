@@ -806,6 +806,7 @@ function App() {
               <div className="education-block reveal">
                 <div className="education-label">EDUCATION</div>
                 <h3>Bachelor of Technology in Computer Science and Engineering (Artificial Intelligence)</h3>
+                <h3>2025-29 Batch (2nd Year)</h3>
                 <p>
                   University of Engineering &amp; Management, Kolkata
                 </p>
