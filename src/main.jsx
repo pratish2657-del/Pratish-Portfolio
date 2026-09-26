@@ -551,7 +551,7 @@ function App() {
               Building at the
               <br />
               intersection of
-              <span> AI & software.</span>
+              <span> AI & software</span>
             </h2>
 
             <p>
@@ -587,9 +587,9 @@ function App() {
             <div>
               <div className="eyebrow">WHAT I BUILD</div>
               <h2>
-                SYSTEMS.
+                SYSTEMS
                 <br />
-                <span>EXPERIENCES.</span>
+                <span>EXPERIENCES</span>
               </h2>
             </div>
             <p>
@@ -740,7 +740,7 @@ function App() {
               <h2>
                 TOOLS THAT
                 <br />
-                <span>MOVE IDEAS.</span>
+                <span>MOVE IDEAS</span>
               </h2>
             </div>
           </div>
@@ -789,7 +789,7 @@ function App() {
               <h2>
                 Technology
                 <br />
-                with <span>purpose.</span>
+                with <span>purpose</span>
               </h2>
 
               <p>
@@ -858,7 +858,7 @@ function App() {
               <br />
               <span>SOMETHING</span>
               <br />
-              MEANINGFUL.
+              MEANINGFUL
             </h2>
 
             <p>
