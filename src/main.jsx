@@ -531,10 +531,6 @@ function App() {
               IMPACT
             </div>
 
-            <div className="orbit-copy orbit-copy-b">
-              A SMARTER EDUCATION<br />
-              <strong>A BRIGHTER TOMORROW</strong>
-            </div>
           </div>
 
           <div className="hero-bottom">
